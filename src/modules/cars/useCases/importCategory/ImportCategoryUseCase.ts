@@ -2,8 +2,8 @@ import { parse } from 'csv-parse';
 import fs from 'fs';
 import { inject, injectable } from 'tsyringe';
 
-import { AppError } from '../../../../errors/AppError';
-import { ICategoriesRepository } from '../../repositories/ICategoriesRepository';
+import { AppError } from '@errors/AppError';
+import { ICategoriesRepository } from '@modules/cars/repositories/ICategoriesRepository';
 
 interface IImportCategory {
   name: string;
@@ -49,7 +49,9 @@ class ImportCategoryUseCase {
     categories.map(async (category) => {
       const { name, description } = category;
 
-      const categoryAlreadyExists = await this.categoriesRepository.findByName(name);
+      const categoryAlreadyExists = await this.categoriesRepository.findByName(
+        name,
+      );
 
       if (categoryAlreadyExists) {
         throw new AppError('Category already exists');
